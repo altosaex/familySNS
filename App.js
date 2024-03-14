@@ -7,7 +7,7 @@ import TabNavigation from './Apps/Navigations/TabNavigation';
 
 export default function App() {
   return (
-		<ClerkProvider  publishableKey='pk_test_YXJ0aXN0aWMtc3BhbmllbC0zNC5jbGVyay5hY2NvdW50cy5kZXYk'>
+			<ClerkProvider  publishableKey='pk_test_YXJ0aXN0aWMtc3BhbmllbC0zNC5jbGVyay5hY2NvdW50cy5kZXYk'>
     <View className="flex-1 bg-white">
       <StatusBar style="auto" />
 			
@@ -15,12 +15,12 @@ export default function App() {
           <NavigationContainer>
 						<TabNavigation />
 					</NavigationContainer>
-        </SignedIn>
-        <SignedOut>
+      </SignedIn>
+      <SignedOut>
         <LoginScreen/>
-        </SignedOut>
+      </SignedOut>
     </View>
-		</ClerkProvider>
+			</ClerkProvider>
   );
 }
 

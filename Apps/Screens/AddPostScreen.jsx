@@ -65,7 +65,7 @@ querySnapshot.forEach((doc) => {
 				value.userName=user.fullName;
 				value.userEmail=user.primaryEmailAddress.emailAddress;
 				value.userImage=user.imageUrl;
-				const docRef = await addDoc(collection(db,"UserPost"),value)
+				const docRef = await addDoc(collection(db,"Post"),value)
 				if(docRef.id)
 					{
 						setLoading(false);

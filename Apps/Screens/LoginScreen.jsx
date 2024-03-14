@@ -28,10 +28,10 @@ export default function LoginScreen() {
 	return (
 		<View>
 			<Image source={require('./../../assets/images/login.jpeg')} 
-				className = "w-[380px] h-[600px] object-cover"
+				className = "w-[380px] h-[550px] object-cover"
 			/>
 			<View className="p-4 bg-white mt-[-20px]  shadow-md">
-				<Text className="text-[35px] font-bold mt-0">家族交換日記</Text>
+				<Text className="text-[35px] font-bold mt-0">FamilySNS</Text>
 				<Text className="text-[18px] text-slate-500 mt-2">クローズドな空間で自己内省を。</Text>
 				<TouchableOpacity onPress={onPress} className="p-4 bg-blue-400 mt-10 rounded-full">
 					<Text className="text-white text-center text-[18px] font-bold">はじめよう</Text>

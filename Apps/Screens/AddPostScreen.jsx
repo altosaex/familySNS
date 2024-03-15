@@ -65,7 +65,7 @@ querySnapshot.forEach((doc) => {
 				value.userName=user.fullName;
 				value.userEmail=user.primaryEmailAddress.emailAddress;
 				value.userImage=user.imageUrl;
-				const docRef = await addDoc(collection(db,"UserPost"),value)
+				const docRef = await addDoc(collection(db,"Post"),value)
 				if(docRef.id)
 					{
 						setLoading(false);
@@ -111,7 +111,7 @@ querySnapshot.forEach((doc) => {
 						<Picker
               selectedValue={values?.category}
 							className="border-2"
-              onValueChange={itemValue=>setFieldValue('category',itemValue)}
+              onValueChange={itemValue=>setFieldValue('Category',itemValue)}
               >
                 {categoryList.length>0 && categoryList?.map((item,index)=>(
                   <Picker.Item key={index}
@@ -146,7 +146,7 @@ querySnapshot.forEach((doc) => {
 							{loading?
 								<ActivityIndicator color='#fff' />
 								:
-								<Text className="text-white text-center tex-[16px]">投稿する</Text>
+								<Text className="text-white text-center text-[16px]">投稿する</Text>
 						}
 							
 						</TouchableOpacity>

@@ -34,7 +34,7 @@ export default function LatestItemList({latestItemList}) {
 
 	const deleteFromFirestore =async()=>{
 		console.log('Deleted');
-		const q = query(collection(db, 'UserPost'), where('desc', '==', post.desc))
+		const q = query(collection(db, 'Post'), where('desc', '==', post.desc))
 		const snapshot = await getDocs(q);
 		snapshot.forEach(doc=>{
 			deleteDoc(doc.ref).then(resp=>{
@@ -55,12 +55,12 @@ export default function LatestItemList({latestItemList}) {
 				renderItem={({item, index})=>(
 					<View className="flex-1 m-2 border-r-blue-400 rounded-lg border-[1px] pt-1 pb-3 pl-4 pr-4 border-slate-200 bg-slate-50">
 
-				<TouchableOpacity className="flex flex-row items-center gap-2 mt-1">
+				<View className="flex flex-row items-center gap-2 mt-1">
 					<Image source = {{uri:item.userImage}}
 						className="rounded-full w-10 h-10" />
 					<Text className="text-[15px] text-blue-400 font-bold">
 					{item.userName}</Text>
-				</TouchableOpacity>
+				</View>
 							{/* <Text className="text-[15px] text-blue-400 font-bold">
 								{item.createdAt}</Text>
 							</View> */}

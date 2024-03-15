@@ -1,7 +1,7 @@
 import { View, Text, TextInput, StyleSheet, Button, TouchableOpacity, Image, ToastAndroid, Alert, ActivityIndicator, KeyboardAvoidingView, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { app } from '../../firebaseConfig';
-import { getFirestore, getDocs, collection, addDoc } from "firebase/firestore";
+import { getFirestore, getDocs, collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { Formik } from 'formik';
 import { Picker } from '@react-native-picker/picker';
@@ -65,6 +65,8 @@ querySnapshot.forEach((doc) => {
 				value.userName=user.fullName;
 				value.userEmail=user.primaryEmailAddress.emailAddress;
 				value.userImage=user.imageUrl;
+				// Firestoreサーバータイムスタンプを使用してcreatedAtを設定
+				value.createdAt = serverTimestamp();
 				const docRef = await addDoc(collection(db,"Post"),value)
 				if(docRef.id)
 					{

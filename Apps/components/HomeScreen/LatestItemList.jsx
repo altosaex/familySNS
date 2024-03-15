@@ -65,9 +65,9 @@ export default function LatestItemList({latestItemList}) {
 								{item.createdAt}</Text>
 							</View> */}
 
-							<View>
-								<Text className="text-[16px] font-bold mt-2">{item.category}</Text>
-								<Text className="text-[20px] mt-2">{item.desc}</Text>
+							<View className="mt-1">
+								<Text className="text-[14px] font-bold mt-2">{item.category}</Text>
+								<Text className="text-[18px] mt-2">{item.desc}</Text>
 							</View>
 
 							<View>
@@ -78,13 +78,13 @@ export default function LatestItemList({latestItemList}) {
 							{user?.primaryEmailAddress.emailAddress==item.userEmail?
 								<TouchableOpacity
 									onPress={()=>deleteUserPost()}
-									className=" z-40 bg-red-500 rounded-full p-4 m-2">
+									className=" z-40 bg-red-500 rounded-full p-3 m-3">
 										<Text className="text-center text-white">コメントを削除</Text>
 								</TouchableOpacity>
 								:
 								<TouchableOpacity
 								onPress={()=>sendComment()}
-								className=" z-40 bg-blue-500 rounded-full p-4 m-2">
+								className=" z-40 bg-blue-500 rounded-full p-3 m-3">
 									<Text className="text-center text-white">コメントを書く</Text>
 							</TouchableOpacity>
 							}

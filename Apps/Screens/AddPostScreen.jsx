@@ -82,7 +82,7 @@ querySnapshot.forEach((doc) => {
 		<KeyboardAvoidingView>
     <ScrollView className="p-10">
       <Formik
-        initialValues={{title:'',desc:'',category:'',image:'',userName:'',userEmail:'',userImage:'',createdAt:Date.now()}} 
+        initialValues={{title:'',desc:'',category:'',image:'',userName:'',userEmail:'',userImage:'',createdAt: serverTimestamp()}} 
         onSubmit={value=>onSubmitMethod(value)}
 				validate={(values)=>{
 					const errors={}

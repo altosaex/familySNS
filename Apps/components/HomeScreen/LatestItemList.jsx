@@ -45,10 +45,10 @@ export default function LatestItemList({latestItemList}) {
 	}
 
 	return (
-		<View className="mt-2">
-			<View className="p-[9px] px-6 bg-slate-50 mt-3 mb-3 border-[1px] border-slate-200 w-[170px] rounded-lg">
+		<View className="mt-3 mb-2">
+			{/* <View className="p-[9px] px-6 bg-slate-50  border-[1px] border-slate-200 w-[170px] rounded-lg">
 						<Text className="ml-6 text-[18px] text-blue-400 font-bold">投稿一覧</Text>
-					</View>
+					</View> */}
 
 			<FlatList
 				data={latestItemList}

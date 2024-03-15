@@ -52,9 +52,9 @@ export default function LatestItemList({latestItemList}) {
 
 			<FlatList
 				data={latestItemList}
-				contentContainerStyle={{ paddingVertical: 8 }}
+				contentContainerStyle={{ paddingVertical: 1 }}
 				renderItem={({item})=>(
-					<View style={{ backgroundColor: 'white', padding: 10, marginBottom: 10, borderRadius: 8 }}>
+					<View style={{ backgroundColor: 'white', padding: 1, marginBottom: 10, borderRadius: 8 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
               <Image source={{ uri: item.userImage }} style={{ width: 40, height: 40, borderRadius: 20 }} />
               <Text style={{ fontSize: 15, fontWeight: 'bold', marginLeft: 8 }}>{item.userName}</Text>

@@ -9,7 +9,7 @@ export default function Header() {
 		<View>
 
 			{/* User Info Section */}
-			<View className="flex flex-row items-center gap-2 mt-5">
+			<View className="flex flex-row items-center gap-2 mt-12 pb-3 bg-slate-200">
 				<Image source={{uri:user?.imageUrl}} 
 					className="rounded-full w-12 h-12"
 				/>

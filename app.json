@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "ssmdssns",
+    "name": "familySNS",
     "slug": "ssmdssnse",
     "scheme": "ssmdssns",
     "version": "1.0.0",
@@ -16,7 +16,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+			"bundleIdentifier": "com.ssmds.familySNS"
     },
     "android": {
       "adaptiveIcon": {
@@ -25,7 +26,8 @@
       },
       "permissions": [
         "android.permission.RECORD_AUDIO"
-      ]
+      ],
+      "package": "com.ssmds.familySNS"
     },
     "web": {
       "favicon": "./assets/favicon.png"

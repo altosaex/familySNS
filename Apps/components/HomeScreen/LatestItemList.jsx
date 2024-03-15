@@ -45,53 +45,37 @@ export default function LatestItemList({latestItemList}) {
 	}
 
 	return (
-		<View className="mt-3 mb-1">
+		<View style={{ marginBottom: 10 }}>
 			{/* <View className="p-[9px] px-6 bg-slate-50  border-[1px] border-slate-200 w-[170px] rounded-lg">
 						<Text className="ml-6 text-[18px] text-blue-400 font-bold">投稿一覧</Text>
 					</View> */}
 
-			<FlatList className="mt-2"
+			<FlatList
 				data={latestItemList}
-				renderItem={({item, index})=>(
-					<View className="flex-1 m-1 border-r-blue-400 rounded-lg border-[1px] pt-1 pb-3 pl-4 pr-4 border-slate-200 bg-slate-50">
-
-				<View className="flex flex-row items-center gap-2 mt-1 mb-1">
-					<Image source = {{uri:item.userImage}}
-						className="rounded-full w-10 h-10" />
-					<Text className="text-[15px] text-blue-400 font-bold">
-					{item.userName}</Text>
-				</View>
-							{/* <Text className="text-[15px] text-blue-400 font-bold">
-								{item.createdAt}</Text>
-							</View> */}
-
-							<View className="mt-1">
-								<Text className="text-[14px] font-bold mt-1">{item.category}</Text>
-								<Text className="text-[18px] mt-1">{item.desc}</Text>
-							</View>
-
-							<View>
-								<Image source = {{uri:item.image}}
-								className="w-[200px] h-[200px] mt-2 rounded-lg" />
-							</View>
-
-							{user?.primaryEmailAddress.emailAddress==item.userEmail?
-								<TouchableOpacity
-									onPress={()=>deleteUserPost()}
-									className=" z-40 bg-red-500 rounded-full p-3 m-3">
-										<Text className="text-center text-white">コメントを削除</Text>
-								</TouchableOpacity>
-								:
-								<TouchableOpacity
-								onPress={()=>sendComment()}
-								className=" z-40 bg-blue-500 rounded-full p-3 m-3">
-									<Text className="text-center text-white">コメントを書く</Text>
-							</TouchableOpacity>
-							}
-
+				contentContainerStyle={{ paddingVertical: 8 }}
+				renderItem={({item})=>(
+					<View style={{ backgroundColor: 'white', padding: 10, marginBottom: 10, borderRadius: 8 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
+              <Image source={{ uri: item.userImage }} style={{ width: 40, height: 40, borderRadius: 20 }} />
+              <Text style={{ fontSize: 15, fontWeight: 'bold', marginLeft: 8 }}>{item.userName}</Text>
+            </View>
+            <Text style={{ fontSize: 14, fontWeight: 'bold', marginBottom: 8 }}>{item.category}</Text>
+            <Text style={{ fontSize: 18, marginBottom: 8 }}>{item.desc}</Text>
+            <Image source={{ uri: item.image }} style={{ width: '70%', height: 220, borderRadius: 8 }} />
+            {user?.primaryEmailAddress.emailAddress == item.userEmail ? (
+              <TouchableOpacity onPress={() => deleteUserPost()} style={{ backgroundColor: 'red', borderRadius: 20, padding: 8, marginTop: 8 }}>
+                <Text style={{ color: 'white', textAlign: 'center' }}>コメントを削除</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={() => sendComment()} style={{ backgroundColor: 'blue', borderRadius: 20, padding: 8, marginTop: 8 }}>
+                <Text style={{ color: 'white', textAlign: 'center' }}>コメントを書く</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+							
+							)}
+							keyExtractor={(item, index) => index.toString()}
+						/>
 					</View>
-				)}
-			/>
-		</View>
 	)
 }

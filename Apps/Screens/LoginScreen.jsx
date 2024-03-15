@@ -28,7 +28,7 @@ export default function LoginScreen() {
 	return (
 		<View>
 			<Image source={require('./../../assets/images/login.jpeg')} 
-				className = "w-[380px] h-[600px] object-cover"
+				className = "w-[380px] h-[550px] object-cover"
 			/>
 			<View className="p-4 bg-white mt-[-20px]  shadow-md">
 				<Text className="text-[35px] font-bold mt-0">familySNS</Text>

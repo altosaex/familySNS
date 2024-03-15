@@ -65,8 +65,8 @@ querySnapshot.forEach((doc) => {
 				value.userName=user.fullName;
 				value.userEmail=user.primaryEmailAddress.emailAddress;
 				value.userImage=user.imageUrl;
-				// Firestoreサーバータイムスタンプを使用してcreatedAtを設定
-				value.createdAt = serverTimestamp();
+			// Firestoreサーバータイムスタンプを使用してcreatedAtを設定
+				value.createdAt = Date.now(); // <- 修正
 				const docRef = await addDoc(collection(db,"Post"),value)
 				if(docRef.id)
 					{
@@ -82,7 +82,7 @@ querySnapshot.forEach((doc) => {
 		<KeyboardAvoidingView>
     <ScrollView className="p-10">
       <Formik
-        initialValues={{title:'',desc:'',category:'',image:'',userName:'',userEmail:'',userImage:'',createdAt: serverTimestamp()}} 
+        initialValues={{title:'',desc:'',category:'',image:'',userName:'',userEmail:'',userImage:'',createdAt: Date.now()}} 
         onSubmit={value=>onSubmitMethod(value)}
 				validate={(values)=>{
 					const errors={}
@@ -113,7 +113,7 @@ querySnapshot.forEach((doc) => {
 						<Picker
               selectedValue={values?.category}
 							className="border-2"
-              onValueChange={itemValue=>setFieldValue('Category',itemValue)}
+              onValueChange={itemValue=>setFieldValue('category',itemValue)}
               >
                 {categoryList.length>0 && categoryList?.map((item,index)=>(
                   <Picker.Item key={index}

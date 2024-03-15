@@ -45,17 +45,17 @@ export default function LatestItemList({latestItemList}) {
 	}
 
 	return (
-		<View className="mt-3 mb-2">
+		<View className="mt-3 mb-1">
 			{/* <View className="p-[9px] px-6 bg-slate-50  border-[1px] border-slate-200 w-[170px] rounded-lg">
 						<Text className="ml-6 text-[18px] text-blue-400 font-bold">投稿一覧</Text>
 					</View> */}
 
-			<FlatList
+			<FlatList className="mt-2"
 				data={latestItemList}
 				renderItem={({item, index})=>(
-					<View className="flex-1 m-2 border-r-blue-400 rounded-lg border-[1px] pt-1 pb-3 pl-4 pr-4 border-slate-200 bg-slate-50">
+					<View className="flex-1 m-1 border-r-blue-400 rounded-lg border-[1px] pt-1 pb-3 pl-4 pr-4 border-slate-200 bg-slate-50">
 
-				<View className="flex flex-row items-center gap-2 mt-1">
+				<View className="flex flex-row items-center gap-2 mt-1 mb-1">
 					<Image source = {{uri:item.userImage}}
 						className="rounded-full w-10 h-10" />
 					<Text className="text-[15px] text-blue-400 font-bold">
@@ -66,8 +66,8 @@ export default function LatestItemList({latestItemList}) {
 							</View> */}
 
 							<View className="mt-1">
-								<Text className="text-[14px] font-bold mt-2">{item.category}</Text>
-								<Text className="text-[18px] mt-2">{item.desc}</Text>
+								<Text className="text-[14px] font-bold mt-1">{item.category}</Text>
+								<Text className="text-[18px] mt-1">{item.desc}</Text>
 							</View>
 
 							<View>

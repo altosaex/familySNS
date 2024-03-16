@@ -15,13 +15,20 @@ export default function AddPostScreen() {
 	const [loading,setLoading] = useState(false);
 	const {user} = useUser();
   const [categoryList, setCategoryList] = useState([]); // categoryList を追加
+	const [selectedQuestion, setSelectedQuestion] = useState("");
 
   useEffect(()=>{
     getCategoryList();
   },[])
 
-  const getCategoryList=async()=>{
-    const querySnapshot = await getDocs(collection(db, 'Category'));
+		const ranAry = () => {
+			let q = ["Q.一番好きな食べ物は？","Q.子供の頃のあだ名は？","Q.どんな時に楽しいと感じる？","Q.自分を漢字一文字で表すと？","Q.今日一番嬉しかったことは？","Q.今日一番腹が立ったことは？","Q.今日一番笑ったことは？","Q.今日の出来事を3つ教えて！","Q.自分の口癖は？","Q.自分ってどんな性格？","Q.最近のマイブームは？","Q.最近一番楽しかったことは？","Q.最近一番面白かったことは？","Q.最近一番悲しかったことは？","Q.最近一番ムカついたことは？","Q.明日やりたいことは？","Q.今日中にやりたいことは？","Q.最近見た夢を教えて！","Q.今の本音をズバリ教えて！","Q.どんな言葉が好き？","Q.言われて嫌な気持ちになる言葉は？","Q.10年後の自分ってどんなイメージ？","Q.家族にひとこと！","Q.自分にひとこと！","Q.何考えてることが多い？","Q.どんな人といると楽？","Q.一緒にいたい人ってどんな人？","Q.寝る時どんなこと考えてる？","Q.子供の頃得意だったことは何？","Q.どの教科が得意だった？","Q.ニックネームは？","Q.人からどのように褒められる？","Q.趣味は何？","Q.家族はあなたのどんなところが好きだと思う？","Q.長年続けていることは何ですか？","Q.周りにはどのような人たちがいますか？","Q.困った時に相談に乗ってくれる人は何人いますか？","Q.何か達成した時に喜んでくれる人たちは誰ですか？","Q.5年後の自分にひとこと！","Q.1週間後の自分を褒めるとしたら何を褒める？","Q.1ヶ月後に世界が滅ぶとしたら何をする？","Q.今1000万円手に入ったら何に使う？","Q.友達から見た自分の印象は？"];
+			const question = q[Math.floor(Math.random() * q.length)];
+			setSelectedQuestion(question);
+		};
+
+		const getCategoryList=async()=>{
+		const querySnapshot = await getDocs(collection(db, 'Category'));
 
 querySnapshot.forEach((doc) => {
   // doc.data() is never undefined for query doc snapshots
@@ -65,6 +72,7 @@ querySnapshot.forEach((doc) => {
 				value.userName=user.fullName;
 				value.userEmail=user.primaryEmailAddress.emailAddress;
 				value.userImage=user.imageUrl;
+				value.userQuestion=selectedQuestion; // selectedQuestionを使う
 			// Firestoreサーバータイムスタンプを使用してcreatedAtを設定
 				value.createdAt = Date.now(); // <- 修正
 				const docRef = await addDoc(collection(db,"Post"),value)
@@ -76,89 +84,117 @@ querySnapshot.forEach((doc) => {
 			})
 		});
 
+		    // フォームをクリア
+				setSelectedQuestion("");
+				// setTweetMessage("");
+				// setTweetImage("");
+				getStorage("");
+				setImage("");
+				getStorage("");
+				getDownloadURL("");
+
 	}
 
-  return (
-		<KeyboardAvoidingView>
-    <ScrollView className="p-10">
-      <Formik
-        initialValues={{title:'',desc:'',category:'',image:'',userName:'',userEmail:'',userImage:'',createdAt: Date.now()}} 
-        onSubmit={value=>onSubmitMethod(value)}
-				validate={(values)=>{
-					const errors={}
-					if(!values.desc)
-					{
-						console.log("投稿内容なし");
-						ToastAndroid.show('投稿内容がありません',ToastAndroid.SHORT)
-						errors.name="desc must be there"
-					}
-				}}
-			>
-          {({handleChange,handleBlur,handleSubmit,values,setFieldValue,errors})=>(
-          <View>
+	return (
+    <KeyboardAvoidingView>
+      <ScrollView style={{ padding: 10 }}>
+        <Formik
+          initialValues={{ title: '', desc: '', category: '', image: '', userName: '', userEmail: '', userImage: '', question:'', createdAt: Date.now() }}
+          onSubmit={values => onSubmitMethod(values)}
+          validate={values => {
+            const errors = {};
+            if (!values.desc) {
+              console.log("投稿内容なし");
+              ToastAndroid.show('投稿内容がありません', ToastAndroid.SHORT);
+              errors.name = "desc must be there";
+            }
+            return errors;
+          }}
+        >
+          {({ handleChange, handleBlur, handleSubmit, values, setFieldValue, errors }) => (
+            <View>
+              <Text style={{ fontSize: 27, fontWeight: 'bold', marginTop: 40 }}>Add New Post</Text>
+              <Text style={{ fontSize: 15, color: '#888', marginBottom: 3 }}>質問から選んで投稿してみよう</Text>
 
-						<Text className="text-[27px] font-bold mt-10">Add New Post</Text>
-						<Text className="text-[15px] text-gray-500 mb-3">質問から選んで投稿してみよう</Text>
+              <TouchableOpacity onPress={pickImage}>
+                {image ?
+                  <Image source={{ uri: image }} style={{ width: 100, height: 100, borderRadius: 5, marginTop: 5 }} />
+                  :
+                  <Image source={require('../../assets/images/placehplder.jpeg')} style={{ width: 100, height: 100, borderRadius: 15, marginTop: 5 }} />}
+              </TouchableOpacity>
 
-						<TouchableOpacity onPress={pickImage}>
-								{image?
-									<Image source={{uri:image}} style={{width:100,height:100,borderRadius:5,marginTop:5}} />
-								:
-								<Image source={require('../../assets/images/placehplder.jpeg')} 
-									style={{width:100,height:100,borderRadius:15,marginTop:5}} />}
-									
+              <TextInput
+                value={selectedQuestion}
+								// selectedValue={values?.question}
+                placeholder='質問を選んでね'
+                editable={false}
+								multiline={true}
+                numberOfLines={2}
+                style={styles.input}
+              />
+						<View style={styles.buttonContainer}>
+							<TouchableOpacity onPress={ranAry}
+								style={{
+                  backgroundColor: loading ? '#ccc' : '#007BFF',
+                  padding: 12,
+                  borderRadius: 5,
+                  marginTop: 10,
+                  alignItems: 'center'
+                }}
+                disabled={loading}>
+								<Text className="text-white">質問を選ぶ</Text>
 							</TouchableOpacity>
 
-						<View style={{borderWidth:1,borderRadius:10,marginTop:15}}>
-						<Picker
-              selectedValue={values?.category}
-							className="border-2"
-              onValueChange={itemValue=>setFieldValue('category',itemValue)}
+							</View>
+
+{/*  */}
+  {/* <Button title="投稿する" onPress={sendTweet} /> */}
+{/* </View> */}
+{/* </View> */}
+
+              {/* <View style={{ borderWidth: 1, borderRadius: 10, marginTop: 15 }}>
+                <Picker
+                  selectedValue={values?.category}
+                  className="border-2"
+                  onValueChange={itemValue => setFieldValue('category', itemValue)}
+                >
+                  {categoryList.length > 0 && categoryList?.map((item, index) => (
+                    <Picker.Item key={index} label={item.name} value={item.name} />
+                  ))}
+                </Picker>
+              </View> */}
+
+              <TextInput
+                style={styles.input}
+                placeholder={'Description'}
+                value={values?.desc}
+                multiline={true}
+                numberOfLines={5}
+                onChangeText={handleChange('desc')}
+              />
+
+              <TouchableOpacity
+                onPress={handleSubmit}
+                style={{
+                  backgroundColor: loading ? '#ccc' : '#007BFF',
+                  padding: 12,
+                  borderRadius: 5,
+                  marginTop: 10,
+                  alignItems: 'center'
+                }}
+                disabled={loading}
               >
-                {categoryList.length>0 && categoryList?.map((item,index)=>(
-                  <Picker.Item key={index}
-                  label={item.name} value={item.name} />
-                ))}
-                
-            </Picker>
-						</View>
+                {loading ?
+                  <ActivityIndicator color='#fff' />
+                  :
+                  <Text style={{ color: '#fff', fontSize: 16 }}>投稿する</Text>
+                }
+							</TouchableOpacity>
 							
-            {/* <TextInput 
-              style={styles.input}
-              placeholder='Title'
-              value={values?.title}
-              onChangeText={handleChange('title')}
-            /> */}
-            <TextInput
-              style={styles.input}
-              placeholder={'Description'}
-              value={values?.desc}
-							multiline={true}
-							numberOfLines={5}
-              onChangeText={handleChange('desc')}
-            />
-
-						<TouchableOpacity onPress={handleSubmit} 
-						style={{
-							backgroundColor:loading?'#ccc':'#007BFF',
-
-						}}
-						disabled={loading}
-						className="p-4 bg-blue-500 rounded-full mt-10">
-							{loading?
-								<ActivityIndicator color='#fff' />
-								:
-								<Text className="text-white text-center text-[16px]">投稿する</Text>
-						}
-							
-						</TouchableOpacity>
-						
-            {/* <Button  title="submit" /> */}
-          </View> 
+            </View>
           )}
-
-      </Formik>
-    </ScrollView>
+        </Formik>
+      </ScrollView>
 		</KeyboardAvoidingView>
   )
 }
@@ -171,7 +207,8 @@ const styles = StyleSheet.create({
     marginTop:15,marginBottom:5,
     paddingHorizontal:17,
 		textAlignVertical:'top',
-    fontSize:17
+    fontSize:17,
+		color: 'gray'
   }
 })
 

@@ -59,7 +59,7 @@ export default function LatestItemList({latestItemList}) {
               <Image source={{ uri: item.userImage }} style={{ width: 40, height: 40, borderRadius: 20 }} />
               <Text style={{ fontSize: 15, fontWeight: 'bold', marginLeft: 8 }}>{item.userName}</Text>
             </View>
-            <Text style={{ fontSize: 14, fontWeight: 'bold', marginBottom: 8 }}>{item.category}</Text>
+            <Text style={{ fontSize: 14, fontWeight: 'bold', marginBottom: 8 }}>{item.userQuestion}</Text>
             <Text style={{ fontSize: 18, marginBottom: 8 }}>{item.desc}</Text>
             <Image source={{ uri: item.image }} style={{ width: '70%', height: 220, borderRadius: 8 }} />
             {user?.primaryEmailAddress.emailAddress == item.userEmail ? (

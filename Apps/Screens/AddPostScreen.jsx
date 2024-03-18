@@ -15,7 +15,6 @@ export default function AddPostScreen( {latestItemList} ) {
   const storage = getStorage();
   const [loading,setLoading] = useState(false);
   const {user} = useUser();
-  const [categoryList, setCategoryList] = useState([]); // categoryList を追加
   const [selectedQuestion, setSelectedQuestion] = useState("");
 
     const ranAry = () => {
@@ -24,18 +23,6 @@ export default function AddPostScreen( {latestItemList} ) {
       setSelectedQuestion(question);
     };
 
-    const getCategoryList=async()=>{
-    const querySnapshot = await getDocs(collection(db, 'Category'));
-
-querySnapshot.forEach((doc) => {
-  // doc.data() is never undefined for query doc snapshots
-  console.log("Docs:", doc.data());
-  // getCategoryList(categoryList=>[...categoryList,doc.data()])
-  // setCategoryList を使って categoryList を更新する
-  setCategoryList((prevCategoryList) => [...prevCategoryList, doc.data()]);
-});
-
-  }
 // Used to Pick Image from Gallary
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -101,7 +88,7 @@ querySnapshot.forEach((doc) => {
     <KeyboardAvoidingView>
       <ScrollView style={{ padding: 10 }}>
         <Formik
-          initialValues={{ title: '', desc: '', category: '', image: '', userName: '', userEmail: '', userImage: '', question:'', createdAt: Date.now() }}
+          initialValues={{ desc: '', image: '', userName: '', userEmail: '', userImage: '', question:'', createdAt: Date.now() }}
           onSubmit={values => onSubmitMethod(values)}
           validate={values => {
             const errors = {};
@@ -148,23 +135,6 @@ querySnapshot.forEach((doc) => {
               </TouchableOpacity>
 
               </View>
-
-{/*  */}
-  {/* <Button title="投稿する" onPress={sendTweet} /> */}
-{/* </View> */}
-{/* </View> */}
-
-              {/* <View style={{ borderWidth: 1, borderRadius: 10, marginTop: 15 }}>
-                <Picker
-                  selectedValue={values?.category}
-                  className="border-2"
-                  onValueChange={itemValue => setFieldValue('category', itemValue)}
-                >
-                  {categoryList.length > 0 && categoryList?.map((item, index) => (
-                    <Picker.Item key={index} label={item.name} value={item.name} />
-                  ))}
-                </Picker>
-              </View> */}
 
               <TextInput
                 style={styles.input}

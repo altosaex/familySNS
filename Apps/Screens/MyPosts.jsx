@@ -17,11 +17,11 @@ export default function MyPosts() {
 		user && getUserPost();
 	}, [user])
 
-	useEffect(()=>{
-		navigation.addListener('focus', (e)=>{
-			getUserPost();
-		})
-	},[navigation])
+	// useEffect(()=>{
+	// 	navigation.addListener('focus', (e)=>{
+	// 		getUserPost();
+	// 	})
+	// },[navigation])
 
 	/**
 	 * Used to get User Post Only

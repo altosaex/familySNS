@@ -4,6 +4,10 @@ import LoginScreen from './Apps/Screens/LoginScreen';
 import { ClerkProvider, SignedIn, SignedOut } from '@clerk/clerk-expo';
 import { NavigationContainer } from '@react-navigation/native';
 import TabNavigation from './Apps/Navigations/TabNavigation';
+import { createStackNavigator } from '@react-navigation/stack';
+import PostDetail from './Apps/Screens/PostDetail.jsx';
+
+const Stack = createStackNavigator();
 
 export default function App() {
   return (
@@ -13,7 +17,10 @@ export default function App() {
 			
 			<SignedIn>
           <NavigationContainer>
-						<TabNavigation />
+					<Stack.Navigator>
+              <Stack.Screen name="Home" component={TabNavigation}  options={{ headerShown: false }} />
+              <Stack.Screen name="PostDetail" component={PostDetail} />
+            </Stack.Navigator>
 					</NavigationContainer>
         </SignedIn>
         <SignedOut>

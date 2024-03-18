@@ -9,20 +9,13 @@ export default function LatestItemList({latestItemList}) {
 	const {user} = useUser();
 	const db = getFirestore(app);
 	const nav = useNavigation();
+	const [items, setItems] = useState(latestItemList); 
 
-	// useEffect(()=>{
-	// 	params&&setProduct(params.product);
-	// },[params])
-	
-	const sendComment=()=>{
-		Linking.openURL('mailto:'+post.userEmail)
-	}
-
-	const deleteUserPost=()=>{
+	const deleteUserPost=( item )=>{
 		Alert.alert('投稿を削除しますか？','一度消した投稿は戻せないよ',[
 			{
 				text:'Yes',
-				onPress:()=>deleteFromFirestore()
+				onPress:()=>deleteFromFirestore( item )
 			},
 			{
 				text:'Cancel',
@@ -32,17 +25,32 @@ export default function LatestItemList({latestItemList}) {
 		])
 	}
 
-	const deleteFromFirestore =async()=>{
+	const deleteFromFirestore = async ( item )=>{
 		console.log('Deleted');
-		const q = query(collection(db, 'Post'), where('desc', '==', post.desc))
-		const snapshot = await getDocs(q);
-		snapshot.forEach(doc=>{
-			deleteDoc(doc.ref).then(resp=>{
+		const q = query (collection(db, 'Post'), where('desc', '==', item.desc));
+	const snapshot = await getDocs(q);
+		snapshot.forEach(async (doc) => { // 非同期処理を行うためにasyncを追加
+	try {
+			await deleteDoc(doc.ref);
 				console.log('Delete the Doc...');
-				nav.goBack();
-			})
-		})
-	}
+				// アイテムのリストから削除されたアイテムをフィルタリングして更新
+        const updatedItems = items.filter((i) => i.desc !== item.desc);
+        setItems(updatedItems);
+				nav.navigate('Home');
+				// 削除成功時のポップアップ表示
+				Alert.alert('削除が完了しました!!', null, [{ text: 'OK' }]);
+			}
+			catch(error) {
+        console.error('Error deleting document:', error);
+			}
+		});
+};
+
+useEffect(() => {
+	// 最新のアイテムリストが変更されたら、それを反映する
+	setItems(latestItemList);
+}, [latestItemList]);
+
 
 	return (
 		<View style={{ marginBottom: 10 }}>
@@ -51,9 +59,10 @@ export default function LatestItemList({latestItemList}) {
 					</View> */}
 
 			<FlatList
-				data={latestItemList}
+				// data={latestItemList}
+				data={items} // 最新の items を表示するように修正
 				contentContainerStyle={{ paddingVertical: 1 }}
-				renderItem={({item})=>(
+				renderItem={({ item })=>(
 					<View style={{ backgroundColor: 'white', padding: 1, marginBottom: 10, borderRadius: 8 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
               <Image source={{ uri: item.userImage }} style={{ width: 40, height: 40, borderRadius: 20 }} />
@@ -63,14 +72,16 @@ export default function LatestItemList({latestItemList}) {
             <Text style={{ fontSize: 18, marginBottom: 8 }}>{item.desc}</Text>
             <Image source={{ uri: item.image }} style={{ width: '70%', height: 220, borderRadius: 8 }} />
             {user?.primaryEmailAddress.emailAddress == item.userEmail ? (
-              <TouchableOpacity onPress={() => deleteUserPost()} style={{ backgroundColor: 'red', borderRadius: 20, padding: 8, marginTop: 8 }}>
-                <Text style={{ color: 'white', textAlign: 'center' }}>コメントを削除</Text>
+              <TouchableOpacity onPress={() => deleteUserPost( item )} style={{ backgroundColor: 'red', borderRadius: 20, padding: 8, marginTop: 8 }}>
+                <Text style={{ color: 'white', textAlign: 'center' }}>投稿を削除</Text>
               </TouchableOpacity>
-            ) : (
-              <TouchableOpacity onPress={() => sendComment()} style={{ backgroundColor: 'blue', borderRadius: 20, padding: 8, marginTop: 8 }}>
+            ) : null }
+              <TouchableOpacity onPress={() => nav.navigate(
+								'PostDetail', { postId: item.postId }
+							)} style={{ backgroundColor: 'blue', borderRadius: 20, padding: 8, marginTop: 8 }}>
                 <Text style={{ color: 'white', textAlign: 'center' }}>コメントを書く</Text>
               </TouchableOpacity>
-            )}
+            
           </View>
 							
 							)}

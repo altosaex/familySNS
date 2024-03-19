@@ -28,10 +28,10 @@ const getLatestItemList=async()=>{
 		<View style={{ flex: 1 }}>
 			<Header />
 
-			<ScrollView className="py-8 px-6 bg-white flex-1">
+			<View className="py-8 px-6 bg-white flex-1">
 			{/* Latest Item List */}
 			<LatestItemList latestItemList = {latestItemList} />
-		</ScrollView>
+		</View>
 		</View>
 	);
 }

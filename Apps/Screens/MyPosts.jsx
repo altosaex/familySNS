@@ -1,6 +1,6 @@
 import { View, Text } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { collection, doc, getDocs, getFirestore, query, where } from 'firebase/firestore';
+import { Query, collection, doc, getDocs, getFirestore, orderBy, query, where } from 'firebase/firestore';
 import { app } from '../../firebaseConfig';
 import { useUser } from '@clerk/clerk-expo';
 import LatestItemList from '../components/HomeScreen/LatestItemList';
@@ -17,18 +17,10 @@ export default function MyPosts() {
 		user && getUserPost();
 	}, [user])
 
-	// useEffect(()=>{
-	// 	navigation.addListener('focus', (e)=>{
-	// 		getUserPost();
-	// 	})
-	// },[navigation])
-
-	/**
-	 * Used to get User Post Only
-	 */
 	const getUserPost = async()=>{
 		setPostList([]);
-		const q = query(collection(db, 'Post'),where('userEmail' , '==', user?.primaryEmailAddress?.emailAddress) );
+		const q = query(collection(db, 'Post'),where('userEmail' , '==', user?.primaryEmailAddress?.emailAddress),
+		orderBy('createdAt', 'desc')); // 降順に並べ替え );
 		const snapshot = await getDocs(q);
 		snapshot.forEach(doc=>{
 			console.log(doc.data());

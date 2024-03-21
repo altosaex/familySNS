@@ -1,7 +1,7 @@
 import { View, Text, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Header from '../components/HomeScreen/Header.jsx';
-import { getFirestore, collection, getDocs, orderBy } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, orderBy, query } from 'firebase/firestore';
 import { app } from '../../firebaseConfig.js';
 import LatestItemList from '../components/HomeScreen/LatestItemList.jsx';
 
@@ -17,7 +17,8 @@ export default function HomeScreen() {
 
 const getLatestItemList=async()=>{
 	setLatesItemList([]);
-	const querySnapShot=await getDocs(collection (db, 'Post'),orderBy('createdAt','desc'));
+	const q =query(collection(db, 'Post'),orderBy('createdAt','desc'));
+	const querySnapShot = await getDocs(q);
 	querySnapShot.forEach((doc)=>{
 		console.log("Docs",doc.data())
 		setLatesItemList(latestItemList=>[...latestItemList,doc.data()]);

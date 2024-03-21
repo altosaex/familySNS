@@ -9,20 +9,13 @@ export default function LatestItemList({latestItemList}) {
 	const {user} = useUser();
 	const db = getFirestore(app);
 	const nav = useNavigation();
+	const [items, setItems] = useState(latestItemList); 
 
-	// useEffect(()=>{
-	// 	params&&setProduct(params.product);
-	// },[params])
-	
-	const sendComment=()=>{
-		Linking.openURL('mailto:'+post.userEmail)
-	}
-
-	const deleteUserPost=()=>{
+	const deleteUserPost=( item )=>{
 		Alert.alert('投稿を削除しますか？','一度消した投稿は戻せないよ',[
 			{
 				text:'Yes',
-				onPress:()=>deleteFromFirestore()
+				onPress:()=>deleteFromFirestore( item )
 			},
 			{
 				text:'Cancel',
@@ -32,66 +25,68 @@ export default function LatestItemList({latestItemList}) {
 		])
 	}
 
-	const deleteFromFirestore =async()=>{
+	const deleteFromFirestore = async ( item )=>{
 		console.log('Deleted');
-		const q = query(collection(db, 'UserPost'), where('desc', '==', post.desc))
-		const snapshot = await getDocs(q);
-		snapshot.forEach(doc=>{
-			deleteDoc(doc.ref).then(resp=>{
+		const q = query (collection(db, 'Post'), where('desc', '==', item.desc));
+	const snapshot = await getDocs(q);
+		snapshot.forEach(async (doc) => { // 非同期処理を行うためにasyncを追加
+	try {
+			await deleteDoc(doc.ref);
 				console.log('Delete the Doc...');
-				nav.goBack();
-			})
-		})
-	}
+				// アイテムのリストから削除されたアイテムをフィルタリングして更新
+        const updatedItems = items.filter((i) => i.desc !== item.desc);
+        setItems(updatedItems);
+				nav.navigate('Home');
+				// 削除成功時のポップアップ表示
+				Alert.alert('削除が完了しました!!', null, [{ text: 'OK' }]);
+			}
+			catch(error) {
+        console.error('Error deleting document:', error);
+			}
+		});
+};
+
+useEffect(() => {
+	// 最新のアイテムリストが変更されたら、それを反映する
+	setItems(latestItemList);
+}, [latestItemList]);
+
 
 	return (
-		<View className="mt-2">
-			<View className="p-[9px] px-6 bg-slate-50 mt-3 mb-3 border-[1px] border-slate-200 w-[170px] rounded-lg">
+		<View style={{ marginBottom: 10 }}>
+			{/* <View className="p-[9px] px-6 bg-slate-50  border-[1px] border-slate-200 w-[170px] rounded-lg">
 						<Text className="ml-6 text-[18px] text-blue-400 font-bold">投稿一覧</Text>
-					</View>
+					</View> */}
 
 			<FlatList
-				data={latestItemList}
-				renderItem={({item, index})=>(
-					<View className="flex-1 m-2 border-r-blue-400 rounded-lg border-[1px] pt-1 pb-3 pl-4 pr-4 border-slate-200 bg-slate-50">
-
-				<TouchableOpacity className="flex flex-row items-center gap-2 mt-1">
-					<Image source = {{uri:item.userImage}}
-						className="rounded-full w-10 h-10" />
-					<Text className="text-[15px] text-blue-400 font-bold">
-					{item.userName}</Text>
-				</TouchableOpacity>
-							{/* <Text className="text-[15px] text-blue-400 font-bold">
-								{item.createdAt}</Text>
-							</View> */}
-
-							<View>
-								<Text className="text-[16px] font-bold mt-2">{item.category}</Text>
-								<Text className="text-[20px] mt-2">{item.desc}</Text>
-							</View>
-
-							<View>
-								<Image source = {{uri:item.image}}
-								className="w-[200px] h-[200px] mt-2 rounded-lg" />
-							</View>
-
-							{user?.primaryEmailAddress.emailAddress==item.userEmail?
-								<TouchableOpacity
-									onPress={()=>deleteUserPost()}
-									className=" z-40 bg-red-500 rounded-full p-4 m-2">
-										<Text className="text-center text-white">コメントを削除</Text>
-								</TouchableOpacity>
-								:
-								<TouchableOpacity
-								onPress={()=>sendComment()}
-								className=" z-40 bg-blue-500 rounded-full p-4 m-2">
-									<Text className="text-center text-white">コメントを書く</Text>
-							</TouchableOpacity>
-							}
-
+				// data={latestItemList}
+				data={items} // 最新の items を表示するように修正
+				contentContainerStyle={{ paddingVertical: 1 }}
+				renderItem={({ item })=>(
+					<View style={{ backgroundColor: 'white', padding: 1, marginBottom: 10, borderRadius: 8 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
+              <Image source={{ uri: item.userImage }} style={{ width: 40, height: 40, borderRadius: 20 }} />
+              <Text style={{ fontSize: 15, fontWeight: 'bold', marginLeft: 8 }}>{item.userName}</Text>
+            </View>
+            <Text style={{ fontSize: 14, fontWeight: 'bold', marginBottom: 8 }}>{item.userQuestion}</Text>
+            <Text style={{ fontSize: 18, marginBottom: 8 }}>{item.desc}</Text>
+            <Image source={{ uri: item.image }} style={{ width: '70%', height: 220, borderRadius: 8 }} />
+            {user?.primaryEmailAddress.emailAddress == item.userEmail ? (
+              <TouchableOpacity onPress={() => deleteUserPost( item )} style={{ backgroundColor: 'red', borderRadius: 20, padding: 8, marginTop: 8 }}>
+                <Text style={{ color: 'white', textAlign: 'center' }}>投稿を削除</Text>
+              </TouchableOpacity>
+            ) : null }
+              <TouchableOpacity onPress={() => nav.navigate(
+								'PostDetail', { postId: item.postId }
+							)} style={{ backgroundColor: 'blue', borderRadius: 20, padding: 8, marginTop: 8 }}>
+                <Text style={{ color: 'white', textAlign: 'center' }}>コメントを書く</Text>
+              </TouchableOpacity>
+            
+          </View>
+							
+							)}
+							keyExtractor={(item, index) => index.toString()}
+						/>
 					</View>
-				)}
-			/>
-		</View>
 	)
 }

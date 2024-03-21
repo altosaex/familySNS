@@ -4,6 +4,7 @@ module.exports = {
   theme: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'), // 例: asyncプラグインの追加
+  ],
 }
-

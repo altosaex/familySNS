@@ -17,18 +17,18 @@ export default function MyPosts() {
 		user && getUserPost();
 	}, [user])
 
-	useEffect(()=>{
-		navigation.addListener('focus', (e)=>{
-			getUserPost();
-		})
-	},[navigation])
+	// useEffect(()=>{
+	// 	navigation.addListener('focus', (e)=>{
+	// 		getUserPost();
+	// 	})
+	// },[navigation])
 
 	/**
 	 * Used to get User Post Only
 	 */
 	const getUserPost = async()=>{
 		setPostList([]);
-		const q = query(collection(db, 'UserPost'),where('userEmail' , '==', user?.primaryEmailAddress?.emailAddress) );
+		const q = query(collection(db, 'Post'),where('userEmail' , '==', user?.primaryEmailAddress?.emailAddress) );
 		const snapshot = await getDocs(q);
 		snapshot.forEach(doc=>{
 			console.log(doc.data());

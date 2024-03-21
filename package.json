@@ -12,6 +12,7 @@
   "dependencies": {
     "@babel/runtime": "^7.24.0",
     "@clerk/clerk-expo": "^0.20.8",
+    "@react-native-community/checkbox": "^0.5.17",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-native-picker/picker": "^2.6.1",
     "@react-navigation/bottom-tabs": "^6.5.16",

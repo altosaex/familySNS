@@ -21,7 +21,8 @@ export default function ProfileScreen() {
 		{
 			id:2,
 			name:'グループ管理',
-			icon:group
+			icon:group,
+			path:'group-management'
 		},
 		{
 			id:3,
@@ -35,9 +36,11 @@ export default function ProfileScreen() {
 		{
 			signOut();
 			
+		} else if (item.path) {
+			navigation.navigate(item.path); // パスが存在する場合は遷移する
 		}
-		item?.path?navigation.navigate(item.path):null;
 	}
+	
 	return (
 		<View className="p-5 bg-white flex-1">
 			<View className="items-center mt-20">

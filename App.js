@@ -6,6 +6,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import TabNavigation from './Apps/Navigations/TabNavigation';
 import { createStackNavigator } from '@react-navigation/stack';
 import PostDetail from './Apps/Screens/PostDetail.jsx';
+import UserPostList from './Apps/Screens/UserPostList';
+import ProfileScreen from './Apps/Screens/ProfileScreen';
 
 const Stack = createStackNavigator();
 
@@ -20,6 +22,8 @@ export default function App() {
 					<Stack.Navigator>
               <Stack.Screen name="Home" component={TabNavigation}  options={{ headerShown: false }} />
               <Stack.Screen name="PostDetail" component={PostDetail} />
+							<Stack.Screen name="グループ管理" component={ProfileScreen} />
+							<Stack.Screen name="UserPostList" component={UserPostList} />
             </Stack.Navigator>
 					</NavigationContainer>
         </SignedIn>

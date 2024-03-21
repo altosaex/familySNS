@@ -3,6 +3,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import ProfileScreen from '../Screens/ProfileScreen';
 import MyPosts from '../Screens/MyPosts';
+import UserPostList from '../Screens/UserPostList';
 
 const Stack = createStackNavigator();
 export default function ProfileScreenStackNav() {
@@ -20,6 +21,15 @@ export default function ProfileScreenStackNav() {
 				},
 				headerTintColor:'#fff',
 				headerTitle:'My Posts'
+			}}
+			/>
+						<Stack.Screen name='group-management' component = {UserPostList}
+			options={{
+				headerStyle:{
+					backgroundColor:'#3b82f6',
+				},
+				headerTintColor:'#fff',
+				headerTitle:'ユーザーリスト管理画面'
 			}}
 			/>
 		</Stack.Navigator>

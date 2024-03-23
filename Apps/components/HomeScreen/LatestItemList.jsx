@@ -9,7 +9,8 @@ export default function LatestItemList({latestItemList}) {
   const {user} = useUser();
   const db = getFirestore(app);
   const nav = useNavigation();
-  const [items, setItems] = useState([]); 
+  const [items, setItems] = useState([]);
+	const [loading,setLoading] = useState(false);
 
   useEffect(() => {
     // 最新のアイテムリストが変更されたら、それを反映する
@@ -72,7 +73,11 @@ export default function LatestItemList({latestItemList}) {
             <Text style={{ fontSize: 18, marginBottom: 8 }}>{item.desc}</Text>
             <Image source={{ uri: item.image }} style={{ width: '70%', height: 220, borderRadius: 8 }} />
             {user?.primaryEmailAddress.emailAddress == item.userEmail ? (
-              <TouchableOpacity onPress={() => deleteUserPost( item )} style={{ backgroundColor: 'red', borderRadius: 20, padding: 8, marginTop: 8 }}>
+              <TouchableOpacity onPress={() => deleteUserPost( item )} style={{ backgroundColor: loading ? 'red' : 'red',
+							padding: 12,
+							borderRadius: 5,
+							marginTop: 10,
+							alignItems: 'center'  }}>
                 <Text style={{ color: 'white', textAlign: 'center' }}>投稿を削除</Text>
               </TouchableOpacity>
             ) : null }
@@ -80,7 +85,11 @@ export default function LatestItemList({latestItemList}) {
                 'AddComments', { 
 									postId: item.postId, userName: item.userName ,createdAt: item.createdAt, desc: item.desc, image: item.image, userEmail: item.userEmail, userImage: item.userImage, userQuestion: item.userQuestion
 									}
-              )} style={{ backgroundColor: 'blue', borderRadius: 20, padding: 8, marginTop: 8 }}>
+              )} style={{ backgroundColor: loading ? '#ccc' : '#007BFF',
+							padding: 12,
+							borderRadius: 5,
+							marginTop: 10,
+							alignItems: 'center' }}>
                 <Text style={{ color: 'white', textAlign: 'center' }}>コメントを書く</Text>
               </TouchableOpacity>
             

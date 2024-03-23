@@ -1,7 +1,7 @@
 import { View, Text, TextInput, StyleSheet, Button, TouchableOpacity, Image, ToastAndroid, Alert, ActivityIndicator, KeyboardAvoidingView, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { app } from '../../firebaseConfig';
-import { getFirestore, getDocs, collection, addDoc, serverTimestamp, orderBy } from "firebase/firestore";
+import { getFirestore, getDocs, collection, addDoc, serverTimestamp, orderBy, query } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { Formik } from 'formik';
 import { Picker } from '@react-native-picker/picker';
@@ -78,6 +78,7 @@ export default function AddPostScreen( {latestItemList} ) {
         
 			const docRef = await addDoc(collection(db, "Post"), postData);
       if (docRef.id) {
+						getLatestPosts();
             setLoading(false);
             Alert.alert('Success!!!','投稿に成功しました。');
 
@@ -96,7 +97,17 @@ export default function AddPostScreen( {latestItemList} ) {
             setPostId(generatePostId()); // 新しい postId を生成して設定
 			};
 
-
+// 最新の投稿リストを取得する関数
+const getLatestPosts = async () => {
+  const q = query(collection(db, 'Post'), orderBy('createdAt', 'desc'));
+  const snapshot = await getDocs(q);
+  const latestPosts = [];
+  snapshot.forEach((doc) => {
+    latestPosts.push(doc.data());
+  });
+  // LatestItemList コンポーネントに最新の投稿リストを渡す
+  setLatestItemList(latestPosts);
+};
 
   return (
     <KeyboardAvoidingView>

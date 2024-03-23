@@ -20,7 +20,7 @@ export default function App() {
           <NavigationContainer>
 					<Stack.Navigator>
               <Stack.Screen name="Home" component={TabNavigation}  options={{ headerShown: false }} />
-              <Stack.Screen name="PostDetail" component={PostDetail} />
+              <Stack.Screen name="AddComments" component={PostDetail} />
             </Stack.Navigator>
 					</NavigationContainer>
         </SignedIn>

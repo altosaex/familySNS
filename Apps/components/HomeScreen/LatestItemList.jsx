@@ -5,39 +5,39 @@ import { collection, deleteDoc, doc, getDocs, getFirestore, query, where } from 
 import { app } from '../../../firebaseConfig';
 import { useNavigation } from '@react-navigation/native';
 
-export default function LatestItemList({latestItemList}) {
-  const {user} = useUser();
+export default function LatestItemList({ latestItemList }) {
+  const { user } = useUser();
   const db = getFirestore(app);
   const nav = useNavigation();
   const [items, setItems] = useState([]);
-	const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     // 最新のアイテムリストが変更されたら、それを反映する
     setItems(latestItemList);
   }, [latestItemList]);
 
-  const deleteUserPost=( item )=>{
-    Alert.alert('投稿を削除しますか？','一度消した投稿は戻せないよ',[
+  const deleteUserPost = (item) => {
+    Alert.alert('投稿を削除しますか？', '一度消した投稿は戻せないよ', [
       {
-        text:'Yes',
-        onPress:()=>deleteFromFirestore( item )
+        text: 'Yes',
+        onPress: () => deleteFromFirestore(item)
       },
       {
-        text:'Cancel',
-        onPress:()=> console.log('Cancel Pressed'),
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
         style: 'cancel',
       },
     ])
   }
 
-  const deleteFromFirestore = async ( item )=>{
+  const deleteFromFirestore = async (item) => {
     console.log('Deleted');
-    const q = query (collection(db, 'Post'), where('desc', '==', item.desc));
-  const snapshot = await getDocs(q);
+    const q = query(collection(db, 'Post'), where('desc', '==', item.desc));
+    const snapshot = await getDocs(q);
     snapshot.forEach(async (doc) => { // 非同期処理を行うためにasyncを追加
-  try {
-      await deleteDoc(doc.ref);
+      try {
+        await deleteDoc(doc.ref);
         console.log('Delete the Doc...');
         // アイテムのリストから削除されたアイテムをフィルタリングして更新
         const updatedItems = items.filter((i) => i.desc !== item.desc);
@@ -46,11 +46,11 @@ export default function LatestItemList({latestItemList}) {
         // 削除成功時のポップアップ表示
         Alert.alert('削除が完了しました!!', null, [{ text: 'OK' }]);
       }
-      catch(error) {
+      catch (error) {
         console.error('Error deleting document:', error);
       }
     });
-};
+  };
 
   return (
     <View style={{ marginBottom: 10 }}>
@@ -62,42 +62,47 @@ export default function LatestItemList({latestItemList}) {
         // data={latestItemList}
         data={items} // 最新の items を表示するように修正
         contentContainerStyle={{ paddingVertical: 1 }}
-        renderItem={({ item })=>(
-          <View style={{ backgroundColor: 'white', padding: 1, marginBottom: 10, borderRadius: 8 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
-              <Image source={{ uri: item.userImage }} style={{ width: 40, height: 40, borderRadius: 20 }} />
-              <Text style={{ fontSize: 15, fontWeight: 'bold', marginLeft: 8 }}>{item.userName}</Text>
-            </View>
-						<Text style={{ color: 'gray' , marginTop: 3, marginBottom: 5, marginLeft: -5, fontSize: 12}}> {item.createdAt.toDate().toString()}</Text>
-            <Text style={{ fontSize: 14, fontWeight: 'bold', marginBottom: 8 }}>{item.userQuestion}</Text>
-            <Text style={{ fontSize: 18, marginBottom: 8 }}>{item.desc}</Text>
-            <Image source={{ uri: item.image }} style={{ width: '70%', height: 220, borderRadius: 8 }} />
-            {user?.primaryEmailAddress.emailAddress == item.userEmail ? (
-              <TouchableOpacity onPress={() => deleteUserPost( item )} style={{ backgroundColor: loading ? 'red' : 'red',
-							padding: 12,
-							borderRadius: 5,
-							marginTop: 10,
-							alignItems: 'center'  }}>
-                <Text style={{ color: 'white', textAlign: 'center' }}>投稿を削除</Text>
-              </TouchableOpacity>
-            ) : null }
+        renderItem={({ item }) => {
+          // [desc]が存在しない場合はnullを返す
+          if (!item.desc) {
+            return null;
+          }
+          return (
+            <View style={{ backgroundColor: 'white', padding: 1, marginBottom: 10, borderRadius: 8 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
+                <Image source={{ uri: item.userImage }} style={{ width: 40, height: 40, borderRadius: 20 }} />
+                <Text style={{ fontSize: 15, fontWeight: 'bold', marginLeft: 8 }}>{item.userName}</Text>
+              </View>
+              <Text style={{ color: 'gray', marginTop: 1, marginBottom: 5, marginLeft: -5, fontSize: 12 }}> {item.createdAt.toDate().toString()}</Text>
+              <Text style={{ fontSize: 14, fontWeight: 'bold', marginBottom: 8 }}>{item.userQuestion}</Text>
+              <Text style={{ fontSize: 18, marginBottom: 8 }}>{item.desc}</Text>
+              <Image source={{ uri: item.image }} style={{ width: '70%', height: 220, borderRadius: 8 }} />
+              {user?.primaryEmailAddress.emailAddress == item.userEmail ? (
+                <TouchableOpacity onPress={() => deleteUserPost(item)} style={{ backgroundColor: loading ? 'red' : 'red',
+                  padding: 12,
+                  borderRadius: 5,
+                  marginTop: 10,
+                  alignItems: 'center' }}>
+                  <Text style={{ color: 'white', textAlign: 'center' }}>投稿を削除</Text>
+                </TouchableOpacity>
+              ) : null}
               <TouchableOpacity onPress={() => nav.navigate(
-                'AddComments', { 
-									postId: item.postId, userName: item.userName ,createdAt: item.createdAt, desc: item.desc, image: item.image, userEmail: item.userEmail, userImage: item.userImage, userQuestion: item.userQuestion
-									}
+                'AddComments', {
+                  DocumentId: item.DocumentId, postId: item.postId, userName: item.userName, createdAt: item.createdAt, desc: item.desc, image: item.image, userEmail: item.userEmail, userImage: item.userImage, userQuestion: item.userQuestion
+                }
               )} style={{ backgroundColor: loading ? '#ccc' : '#007BFF',
-							padding: 12,
-							borderRadius: 5,
-							marginTop: 10,
-							alignItems: 'center' }}>
+                padding: 12,
+                borderRadius: 5,
+                marginTop: 10,
+                alignItems: 'center' }}>
                 <Text style={{ color: 'white', textAlign: 'center' }}>コメントを書く</Text>
               </TouchableOpacity>
-            
-          </View>
-              
-              )}
-              keyExtractor={(item, index) => index.toString()}
-            />
-          </View>
+
+            </View>
+          )
+        }}
+        keyExtractor={(item, index) => index.toString()}
+      />
+    </View>
   )
-}
+};

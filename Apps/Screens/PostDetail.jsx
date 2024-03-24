@@ -30,14 +30,13 @@ export default function PostDetail() {
         userImage: user.imageUrl, // ログインユーザーの画像を使用
         comment,
         createdAt: new Date()
-      }
-			);
+      });
 
       setComment('');
       Alert.alert('コメントが追加されました！');
-			console.log('userName:', userName);
-			console.log('userImage:', userImage);
 
+			// コメントが追加された後にコメントリストを再取得して画面を更新する
+			getUserPost();
     } catch (error) {
       console.log('コメントの追加に失敗しました。', error);
       Alert.alert('コメントの追加に失敗しました。');

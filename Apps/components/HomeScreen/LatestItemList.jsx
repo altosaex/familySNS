@@ -74,6 +74,7 @@ export default function LatestItemList({ latestItemList }) {
                 <Text style={{ fontSize: 15, fontWeight: 'bold', marginLeft: 8 }}>{item.userName}</Text>
               </View>
               <Text style={{ color: 'gray', marginTop: 1, marginBottom: 5, marginLeft: -5, fontSize: 12 }}> {item.createdAt.toDate().toString()}</Text>
+							<Text style={{ fontSize: 14, fontWeight: 'bold', marginBottom: 8 }}>{item.comment}</Text>
               <Text style={{ fontSize: 14, fontWeight: 'bold', marginBottom: 8 }}>{item.userQuestion}</Text>
               <Text style={{ fontSize: 18, marginBottom: 8 }}>{item.desc}</Text>
               <Image source={{ uri: item.image }} style={{ width: '70%', height: 220, borderRadius: 8 }} />
@@ -88,7 +89,7 @@ export default function LatestItemList({ latestItemList }) {
               ) : null}
               <TouchableOpacity onPress={() => nav.navigate(
                 'AddComments', {
-                  DocumentId: item.DocumentId, postId: item.postId, userName: item.userName, createdAt: item.createdAt, desc: item.desc, image: item.image, userEmail: item.userEmail, userImage: item.userImage, userQuestion: item.userQuestion
+                  DocumentId: item.DocumentId, postId: item.postId, userName: item.userName, createdAt: item.createdAt, desc: item.desc, image: item.image, userEmail: item.userEmail, userImage: item.userImage, userQuestion: item.userQuestion, comment: item.comment
                 }
               )} style={{ backgroundColor: loading ? '#ccc' : '#007BFF',
                 padding: 12,

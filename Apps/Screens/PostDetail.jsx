@@ -26,14 +26,18 @@ export default function PostDetail() {
     try {
       const newCommentRef = await addDoc(collection(db, 'Post'), {
         postId,
-        userName,
-        userImage,
+        userName: user.fullName, // ログインユーザーの名前を使用
+        userImage: user.imageUrl, // ログインユーザーの画像を使用
         comment,
         createdAt: new Date()
-      });
+      }
+			);
 
       setComment('');
       Alert.alert('コメントが追加されました！');
+			console.log('userName:', userName);
+			console.log('userImage:', userImage);
+
     } catch (error) {
       console.log('コメントの追加に失敗しました。', error);
       Alert.alert('コメントの追加に失敗しました。');

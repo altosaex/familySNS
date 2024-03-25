@@ -15,21 +15,22 @@ export default function HomeScreen() {
 		getLatestItemList();
 	},[])
 
-const getLatestItemList=async()=>{
-	setLatesItemList([]);
-	const q =query(collection(db, 'Post'),orderBy('createdAt','desc'));
-	const querySnapShot = await getDocs(q);
-	querySnapShot.forEach((doc)=>{
-		console.log("Docs",doc.data())
-		setLatesItemList(latestItemList=>[...latestItemList,doc.data()]);
-	})
-}
+	const getLatestItemList = async () => {
+		try {
+				const q = query(collection(db, 'Post'), orderBy('createdAt', 'desc'));
+				const querySnapshot = await getDocs(q);
+				const latestItems = querySnapshot.docs.map(doc => doc.data());
+				setLatesItemList(latestItems); // 最新の投稿リストで状態を更新
+		} catch (error) {
+				console.error('Error getting latest items:', error);
+		}
+};
 
 	return (
 		<View style={{ flex: 1 }}>
 			<Header />
 
-			<View className="py-8 px-6 bg-white flex-1">
+			<View className="py-3 px-3 bg-white flex-1">
 			{/* Latest Item List */}
 			<LatestItemList latestItemList = {latestItemList} />
 		</View>

@@ -22,11 +22,13 @@ export default function MyPosts() {
 		const q = query(collection(db, 'Post'),where('userEmail' , '==', user?.primaryEmailAddress?.emailAddress),
 		orderBy('createdAt', 'desc')); // 降順に並べ替え );
 		const snapshot = await getDocs(q);
+		const fetchedPosts = [];
 		snapshot.forEach(doc=>{
 			console.log(doc.data());
-			setPostList(postList=>[...postList,doc.data()]);
-		})
-	}
+      fetchedPosts.push(doc.data());
+        });
+        setPostList(fetchedPosts); // 投稿リストを更新
+    }
 	return (
 		<View className="m-2">
 			<LatestItemList latestItemList = {postList}

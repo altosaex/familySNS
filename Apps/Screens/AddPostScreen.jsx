@@ -17,6 +17,7 @@ export default function AddPostScreen( {latestItemList} ) {
   const {user} = useUser();
   const [selectedQuestion, setSelectedQuestion] = useState("");
 	const [postId, setPostId] = useState(""); // postId の状態を管理
+	const [postList,setPostList] = useState([]);
 
 	// postId を生成する関数
   const generatePostId = () => {
@@ -106,7 +107,7 @@ const getLatestPosts = async () => {
     latestPosts.push(doc.data());
   });
   // LatestItemList コンポーネントに最新の投稿リストを渡す
-  setLatestItemList(latestPosts);
+  setPostList(latestPosts);
 };
 
   return (

@@ -5,7 +5,8 @@ import { ClerkProvider, SignedIn, SignedOut } from '@clerk/clerk-expo';
 import { NavigationContainer } from '@react-navigation/native';
 import TabNavigation from './Apps/Navigations/TabNavigation';
 import { createStackNavigator } from '@react-navigation/stack';
-import PostDetail from './Apps/Screens/PostDetail.jsx';
+import PostDetail from './Apps/Screens/PostDetail';
+import { AppRegistry } from 'react-native';
 
 const Stack = createStackNavigator();
 
@@ -19,7 +20,7 @@ export default function App() {
           <NavigationContainer>
 					<Stack.Navigator>
               <Stack.Screen name="Home" component={TabNavigation}  options={{ headerShown: false }} />
-              <Stack.Screen name="PostDetail" component={PostDetail} />
+              <Stack.Screen name="AddComments" component={PostDetail} />
             </Stack.Navigator>
 					</NavigationContainer>
         </SignedIn>
@@ -30,6 +31,8 @@ export default function App() {
 		</ClerkProvider>
   );
 }
+
+AppRegistry.registerComponent('familySNS', () => App);
 
 // const styles = StyleSheet.create({
 //   container: {

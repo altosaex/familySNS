@@ -20,7 +20,7 @@ export default function ProfileScreen() {
 		},
 		{
 			id:2,
-			name:'グループ管理',
+			name:'グループ管理(Coming Soon...)',
 			icon:group
 		},
 		{

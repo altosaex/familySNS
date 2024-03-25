@@ -1,7 +1,7 @@
 import { View, Text, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import Header from '../components/HomeScreen/Header.jsx';
-import { getFirestore, collection, getDocs, orderBy, query } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, orderBy, query, onSnapshot } from 'firebase/firestore';
 import { app } from '../../firebaseConfig.js';
 import LatestItemList from '../components/HomeScreen/LatestItemList.jsx';
 
@@ -10,21 +10,21 @@ export default function HomeScreen() {
 	// const [sliderList,setSliderList]=useState([]);
 	const [latestItemList,setLatesItemList]=useState([]);
 
-	useEffect(()=>{
-		// getSliders();
-		getLatestItemList();
-	},[])
+	useEffect(() => {
+    // 最新のアイテムリストが変更されたら、それを反映する
+    const unsubscribe = onSnapshot(query(collection(db, 'Post'), orderBy('createdAt', 'desc')), (snapshot) => {
+      const latestItems = [];
+      snapshot.forEach((doc) => {
+        latestItems.push(doc.data());
+      });
+      setLatesItemList(latestItems);
+    }, (error) => {
+      console.error('Error getting latest items:', error);
+    });
 
-	const getLatestItemList = async () => {
-		try {
-				const q = query(collection(db, 'Post'), orderBy('createdAt', 'desc'));
-				const querySnapshot = await getDocs(q);
-				const latestItems = querySnapshot.docs.map(doc => doc.data());
-				setLatesItemList(latestItems); // 最新の投稿リストで状態を更新
-		} catch (error) {
-				console.error('Error getting latest items:', error);
-		}
-};
+    // コンポーネントのクリーンアップ
+    return () => unsubscribe();
+  }, []);
 
 	return (
 		<View style={{ flex: 1 }}>

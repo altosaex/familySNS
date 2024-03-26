@@ -15,13 +15,27 @@ export default function MyPosts() {
 
 	useEffect(() => {
 		// 最新のアイテムリストが変更されたら、それを反映する
-		const unsubscribe = onSnapshot(query(collection(db, 'Post'), orderBy('createdAt', 'desc')), (snapshot) => {
+		const unsubscribe = onSnapshot(query(collection(db, 'Post'), 
+		orderBy('createdAt', 'desc')),
+		(snapshot) => {
 			const postLists = [];
 			snapshot.forEach((doc) => {
 				postLists.push(doc.data());
 			});
 			setPostList(postLists);
-		});
+			user && getUserPost();
+		}, [user]);
+
+		const getUserPost = async()=>{
+			setPostList([]);
+			const q = query(collection(db, 'Post'),where('userEmail' , '==', user?.primaryEmailAddress?.emailAddress),
+			orderBy('createdAt', 'desc')); // 降順に並べ替え );
+			const snapshot = await getDocs(q);
+			snapshot.forEach(doc=>{
+				console.log(doc.data());
+				setPostList(postList=>[...postList,doc.data()]);
+			})
+		}
 
 		// コンポーネントのクリーンアップ
 		return () => unsubscribe();

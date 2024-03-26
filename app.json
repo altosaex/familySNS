@@ -16,11 +16,12 @@
       "**/*"
     ],
     "ios": {
+			"buildNumber": "4",
       "supportsTablet": true,
 			"bundleIdentifier": "com.ssmds.familySNS"
     },
     "android": {
-			"versionCode": 2,
+			"versionCode": 4,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
